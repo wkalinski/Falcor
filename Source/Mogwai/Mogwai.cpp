@@ -609,6 +609,15 @@ namespace Mogwai
         const float4 clearColor(0.38f, 0.52f, 0.10f, 1);
         pRenderContext->clearFbo(pTargetFbo.get(), clearColor, 1.0f, 0, FboAttachmentType::All);
 
+        auto& clock = gpFramework->getGlobalClock();
+        if (clock.isSimulatingFps() && !clock.isPaused()) {
+            SetEnvironmentVariableA("IKSDE_FRAME_ID", std::to_string(clock.getFrame()).c_str());
+        }
+        else
+        {
+            SetEnvironmentVariableA("IKSDE_FRAME_ID", std::to_string(-1).c_str());
+        }
+
         if (mActiveGraph < mGraphs.size())
         {
             auto& pGraph = mGraphs[mActiveGraph].pGraph;

@@ -129,6 +129,9 @@ namespace Falcor
         FrameRate mFrameRate;
         Clock mClock;
 
+        static const uint32_t spp = 4096;
+        uint32_t samplesInCurrentFrame = 0;
+
         IRenderer::UniquePtr mpRenderer;
 
         struct VideoCaptureData

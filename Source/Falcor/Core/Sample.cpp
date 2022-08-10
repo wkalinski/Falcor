@@ -196,6 +196,7 @@ namespace Falcor
 
     void Sample::run(const SampleConfig& config, IRenderer::UniquePtr& pRenderer, uint32_t argc, char** argv)
     {
+        SetEnvironmentVariableA("IKSDE_SPP", std::to_string(spp).c_str());
         Sample s(pRenderer);
         try
         {
@@ -460,7 +461,16 @@ namespace Falcor
         // Check clock exit condition
         if (mClock.shouldExit()) postQuitMessage(0);
 
-        mClock.tick();
+        
+
+        //logInfo(std::to_string(framesInCurrentTick));
+        if (samplesInCurrentFrame > spp)
+        {
+            mClock.tick();
+            samplesInCurrentFrame = 0;
+        }
+        samplesInCurrentFrame++;
+        SetEnvironmentVariableA("IKSDE_SAMPLE_NO", std::to_string(samplesInCurrentFrame).c_str());
         mFrameRate.newFrame();
         if (mVideoCapture.fixedTimeDelta) { mClock.setTime(mVideoCapture.currentTime); }
 
